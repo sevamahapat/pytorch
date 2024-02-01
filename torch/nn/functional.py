@@ -3352,6 +3352,10 @@ def mse_loss(
         return handle_torch_function(
             mse_loss, (input, target), input, target, size_average=size_average, reduce=reduce, reduction=reduction
         )
+    
+    if reduction == 'sum':
+        raise ValueError("Reduction mode 'sum' is unsupported.")
+
     if not (target.size() == input.size()):
         warnings.warn(
             f"Using a target size ({target.size()}) that is different to the input size ({input.size()}). "
