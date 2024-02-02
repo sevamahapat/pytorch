@@ -3352,6 +3352,10 @@ def mse_loss(
         return handle_torch_function(
             mse_loss, (input, target), input, target, size_average=size_average, reduce=reduce, reduction=reduction
         )
+    
+    if reduction == 'sum':
+        raise ValueError("Reduction mode 'sum' is unsupported.")
+
     if not (target.size() == input.size()):
         warnings.warn(
             f"Using a target size ({target.size()}) that is different to the input size ({input.size()}). "
@@ -3853,7 +3857,7 @@ def interpolate(  # noqa: F811
 ) -> Tensor:  # noqa: F811
     pass
 
-def interpolate(input: Tensor, size: Optional[int] = None, scale_factor: Optional[List[float]] = None, mode: str = 'nearest', align_corners: Optional[bool] = None, recompute_scale_factor: Optional[bool] = None, antialias: bool = False) -> Tensor:  # noqa: F811,B950
+def interpolate(input: Tensor, size: Optional[int] = None, scale_factor: Optional[List[float]] = None, mode: str = 'bilinear', align_corners: Optional[bool] = True, recompute_scale_factor: Optional[bool] = None, antialias: bool = False) -> Tensor:  # noqa: F811,B950
     r"""Down/up samples the input.
 
     Tensor interpolated to either the given :attr:`size` or the given
